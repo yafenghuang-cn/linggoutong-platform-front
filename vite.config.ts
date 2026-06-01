@@ -7,7 +7,6 @@ import { resolve } from "path";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  console.log(env, "env");
   return {
     plugins: [
       vue(),
@@ -41,6 +40,11 @@ export default defineConfig(({ mode }) => {
       },
       // 优化模块解析
       extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+    },
+    css: {
+      preprocessorOptions: {
+        scss: { api: "modern-compiler" },
+      },
     },
   };
 });
