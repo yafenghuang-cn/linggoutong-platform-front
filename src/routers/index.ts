@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
+import RootLayout from "@/layouts/index.vue";
 
 // 路由配置
 const routes: RouteRecordRaw[] = [
@@ -11,22 +12,28 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/",
-    name: "Home",
-    component: () => import("@/pages/home/index.vue"),
-    meta: { title: "首页", requiresAuth: true },
+    component: RootLayout,
+    children: [
+      {
+        path: "/",
+        name: "Home",
+        component: () => import("@/pages/home/index.vue"),
+        meta: { title: "首页" },
+      },
+      {
+        path: "/mine",
+        name: "Mine",
+        component: () => import("@/pages/mine/index.vue"),
+        meta: { title: "个人中心", requiresAuth: true },
+      },
+    ],
   },
   {
-    path: "/mine",
-    name: "Mine",
-    component: () => import("@/pages/mine/index.vue"),
-    meta: { title: "关于", requiresAuth: true },
+    // 404 兜底路由
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/pages/NotFound/index.vue"),
   },
-  //   {
-  //     // 404 兜底路由
-  //     path: '/:pathMatch(.*)*',
-  //     name: 'NotFound',
-  //     component: () => import('@/views/NotFound.vue'),
-  //   },
 ];
 
 const router = createRouter({

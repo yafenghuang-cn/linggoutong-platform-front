@@ -1,0 +1,140 @@
+.app-layout {
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 64px;
+  --navbar-height: 56px;
+  --sidebar-bg: #001529;
+  --sidebar-text: rgb(255 255 255 / 65%);
+  --sidebar-active-text: #fff;
+  --content-bg: #f0f2f5;
+
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--content-bg);
+
+  &.is-collapsed {
+    --sidebar-current-width: var(--sidebar-collapsed-width);
+  }
+
+  &:not(.is-collapsed) {
+    --sidebar-current-width: var(--sidebar-width);
+  }
+}
+
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--sidebar-current-width);
+  height: 100%;
+  background: var(--sidebar-bg);
+  transition: width 0.2s ease;
+  overflow: hidden;
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--navbar-height);
+    padding: 0 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid rgb(255 255 255 / 8%);
+  }
+
+  &__logo-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+  }
+
+  &__logo-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  &__menu-wrap {
+    flex: 1;
+    min-height: 0;
+  }
+
+  &__menu {
+    --el-menu-bg-color: transparent;
+    --el-menu-text-color: var(--sidebar-text);
+    --el-menu-hover-bg-color: rgb(255 255 255 / 8%);
+    --el-menu-active-color: var(--sidebar-active-text);
+
+    border-right: none;
+
+    &:not(.el-menu--collapse) {
+      width: var(--sidebar-width);
+    }
+  }
+}
+
+.app-layout.is-collapsed {
+  .app-sidebar__logo {
+    justify-content: center;
+    padding: 0 8px;
+  }
+}
+
+.app-layout__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: var(--navbar-height);
+  padding: 0 16px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__collapse-btn {
+    padding: 8px;
+    color: #606266;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  &__user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  &__username {
+    font-size: 14px;
+    color: #303133;
+  }
+}
+
+.app-layout__content {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  overflow: auto;
+}
