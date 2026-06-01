@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import RootLayout from "@/layouts/index.vue";
+import { useUserStore } from "@/stores/user";
 
 // 路由配置
 const routes: RouteRecordRaw[] = [
@@ -9,6 +10,12 @@ const routes: RouteRecordRaw[] = [
     name: "Login",
     component: () => import("@/pages/login/index.vue"),
     meta: { title: "登录", requiresAuth: false },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("@/pages/register/index.vue"),
+    meta: { title: "注册", requiresAuth: false },
   },
   {
     path: "/",
@@ -39,6 +46,24 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to) => {
+  const userStore = useUserStore();
+  const publicPaths = ["/login", "/register"];
+
+  if (publicPaths.includes(to.path)) {
+    return userStore.token ? "/" : true;
+  }
+
+  if (to.meta.requiresAuth && !userStore.token) {
+    return {
+      path: "/login",
+      query: { redirect: to.fullPath },
+    };
+  }
+
+  return true;
 });
 
 export default router;

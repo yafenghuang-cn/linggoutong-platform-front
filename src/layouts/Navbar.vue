@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ArrowDown, Expand, Fold, UserFilled } from "@element-plus/icons-vue";
+import { useUserStore } from "@/stores/user";
 
 const props = defineProps<{
   collapsed: boolean;
@@ -12,7 +13,8 @@ const emit = defineEmits<{
 }>();
 
 const route = useRoute();
-
+const router = useRouter();
+const userStore = useUserStore();
 const breadcrumbs = computed(() =>
   route.matched
     .filter((item) => item.meta?.title)
@@ -21,6 +23,14 @@ const breadcrumbs = computed(() =>
       path: item.path,
     })),
 );
+
+
+const handleLogout = () => {
+  userStore.logout();
+  router.push("/login");
+};
+
+const displayName = computed(() => userStore.username || "管理员");
 </script>
 
 <template>
@@ -47,7 +57,7 @@ const breadcrumbs = computed(() =>
         <span class="app-navbar__user">
           <el-avatar :size="32" :icon="UserFilled" />
           <span class="app-navbar__user-info">
-            <span class="app-navbar__username">管理员</span>
+            <span class="app-navbar__username">{{ displayName }}</span>
             <span class="app-navbar__role">超级管理员</span>
           </span>
           <el-icon class="app-navbar__arrow"><ArrowDown /></el-icon>
@@ -55,7 +65,7 @@ const breadcrumbs = computed(() =>
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item divided>退出登录</el-dropdown-item>
+            <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
