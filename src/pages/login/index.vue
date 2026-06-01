@@ -1,68 +1,3 @@
-<script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { Lock, User } from "@element-plus/icons-vue";
-import type { FormInstance, FormRules } from "element-plus";
-import { ElMessage } from "element-plus";
-import { useUserStore } from "@/stores/user";
-
-const REMEMBER_KEY = "login_remember_username";
-
-const router = useRouter();
-const route = useRoute();
-const userStore = useUserStore();
-
-const formRef = ref<FormInstance>();
-const loading = ref(false);
-
-const form = reactive({
-  username: localStorage.getItem(REMEMBER_KEY) || "",
-  password: "",
-  remember: Boolean(localStorage.getItem(REMEMBER_KEY)),
-});
-
-const rules: FormRules = {
-  username: [{ required: true, message: "请输入账号", trigger: "blur" }],
-  password: [
-    { required: true, message: "请输入密码", trigger: "blur" },
-    { min: 6, message: "密码长度不能少于 6 位", trigger: "blur" },
-  ],
-};
-
-const handleSubmit = async () => {
-  const valid = await formRef.value?.validate().catch(() => false);
-  if (!valid) return;
-
-  loading.value = true;
-
-  try {
-    await userStore.login({
-      username: form.username,
-      password: form.password,
-    });
-
-    if (form.remember) {
-      localStorage.setItem(REMEMBER_KEY, form.username.trim());
-    } else {
-      localStorage.removeItem(REMEMBER_KEY);
-    }
-
-    ElMessage.success("登录成功");
-
-    const redirect = typeof route.query.redirect === "string" ? route.query.redirect : "/";
-    router.replace(redirect);
-  } catch {
-    ElMessage.error("账号或密码错误");
-  } finally {
-    loading.value = false;
-  }
-};
-
-const goRegister = () => {
-  router.push("/register");
-};
-</script>
-
 <template>
   <div class="auth-page">
     <div class="auth-page__banner">
@@ -72,7 +7,9 @@ const goRegister = () => {
           <span class="auth-page__brand-name">零购通平台</span>
         </div>
 
-        <p class="auth-page__slogan">面向企业的数字化运营管理平台，助力业务高效协同与数据驱动决策。</p>
+        <p class="auth-page__slogan">
+          面向企业的数字化运营管理平台，助力业务高效协同与数据驱动决策。
+        </p>
 
         <div class="auth-page__features">
           <div class="auth-page__feature-item">统一权限与组织架构管理</div>
@@ -96,7 +33,11 @@ const goRegister = () => {
           @submit.prevent="handleSubmit"
         >
           <el-form-item prop="username">
-            <el-input v-model="form.username" placeholder="账号：admin" :prefix-icon="User" />
+            <el-input
+              v-model="form.username"
+              placeholder="账号：admin"
+              :prefix-icon="User"
+            />
           </el-form-item>
 
           <el-form-item prop="password">
@@ -115,7 +56,12 @@ const goRegister = () => {
             <a class="auth-page__link">忘记密码</a>
           </div>
 
-          <el-button class="auth-page__submit" type="primary" :loading="loading" @click="handleSubmit">
+          <el-button
+            class="auth-page__submit"
+            type="primary"
+            :loading="loading"
+            @click="handleSubmit"
+          >
             登录
           </el-button>
 
@@ -130,5 +76,13 @@ const goRegister = () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { Lock, User } from "@element-plus/icons-vue";
+import useLogin from "./useLogin";
+
+const { handleSubmit, goRegister, form, rules, loading } = useLogin();
+
+</script>
 
 <style lang="scss" src="@/styles/auth.scss"></style>
