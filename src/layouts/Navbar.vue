@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { Expand, Fold, UserFilled } from "@element-plus/icons-vue";
+import { ArrowDown, Expand, Fold, UserFilled } from "@element-plus/icons-vue";
 
 const props = defineProps<{
   collapsed: boolean;
@@ -33,7 +33,9 @@ const breadcrumbs = computed(() =>
         </el-icon>
       </el-button>
 
-      <el-breadcrumb separator="/">
+      <span class="app-navbar__divider" />
+
+      <el-breadcrumb class="app-navbar__breadcrumb" separator="/">
         <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
           {{ item.title }}
         </el-breadcrumb-item>
@@ -43,8 +45,12 @@ const breadcrumbs = computed(() =>
     <div class="app-navbar__right">
       <el-dropdown trigger="click">
         <span class="app-navbar__user">
-          <el-avatar :size="28" :icon="UserFilled" />
-          <span class="app-navbar__username">管理员</span>
+          <el-avatar :size="32" :icon="UserFilled" />
+          <span class="app-navbar__user-info">
+            <span class="app-navbar__username">管理员</span>
+            <span class="app-navbar__role">超级管理员</span>
+          </span>
+          <el-icon class="app-navbar__arrow"><ArrowDown /></el-icon>
         </span>
         <template #dropdown>
           <el-dropdown-menu>

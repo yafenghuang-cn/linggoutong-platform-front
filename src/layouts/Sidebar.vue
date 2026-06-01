@@ -14,11 +14,16 @@ const activeMenu = computed(() => route.path);
 <template>
   <aside class="app-sidebar">
     <div class="app-sidebar__logo">
-      <img src="@/assets/vue.svg" alt="logo" class="app-sidebar__logo-icon" />
-      <span v-show="!collapsed" class="app-sidebar__logo-text">零购通平台</span>
+      <div class="app-sidebar__logo-mark">零</div>
+      <div v-show="!collapsed" class="app-sidebar__logo-text">
+        <span class="app-sidebar__logo-title">零购通平台</span>
+        <span class="app-sidebar__logo-subtitle">Enterprise Console</span>
+      </div>
     </div>
 
     <el-scrollbar class="app-sidebar__menu-wrap">
+      <div v-show="!collapsed" class="app-sidebar__section">主导航</div>
+
       <el-menu
         :default-active="activeMenu"
         :collapse="collapsed"
@@ -34,9 +39,3 @@ const activeMenu = computed(() => route.path);
     </el-scrollbar>
   </aside>
 </template>
-
-<style scoped lang="scss">
-.app-sidebar__menu :deep(.el-menu-item.is-active) {
-  background-color: #1890ff;
-}
-</style>

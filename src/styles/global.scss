@@ -6,6 +6,13 @@
   padding: 0;
 }
 
+:root {
+  --color-text-primary: #0f172a;
+  --color-bg: #f4f6f9;
+  --font-size-md: 14px;
+  --line-height-normal: 1.5715;
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
